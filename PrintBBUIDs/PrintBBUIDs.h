@@ -5,10 +5,9 @@
 #include "llvm/IR/PassManager.h"
 #include "llvm/Pass.h"
 
-//------------------------------------------------------------------------------
-// New PM interface
-//------------------------------------------------------------------------------
-struct PrintBBUIDs : public llvm::PassInfoMixin<PrintBBUIDs> {
+
+struct PrintBBUIDs : public llvm::PassInfoMixin<PrintBBUIDs>
+{
   llvm::PreservedAnalyses run(llvm::Module &M,
                               llvm::ModuleAnalysisManager &);
   bool runOnModule(llvm::Module &M);
