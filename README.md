@@ -1,6 +1,6 @@
 # LLMV - Print Basic Block Unique IDentifiers
 
-This LLVM pass instruments each basic block (BB) of a C program by injecting as its first instruction a call to the `print' function, so that each time a BB is executed, it prints a unique identifier.
+This LLVM pass instruments each basic block (BB) of a C program by injecting as its first instruction a call to the `print` function, so that each time a BB is executed, it prints a unique identifier.
 
 
 ## What is the purpose of this?
@@ -12,7 +12,7 @@ In this class I have some limitations:
  
 2) The students only know how to program in Python;
 
-3) They have to do an assignment, but I do not want them to use real fuzzers: get your hands dirty with code!
+3) They have to do an assignment, but I want them to use something other than real fuzzers: get their hands dirty with code!
 
 4) I want them to fuzz a real binary, maybe one they wrote, so I need a feedback mechanism.
 
@@ -37,7 +37,7 @@ cd LLMV-PrintBBUIDs/
 ```
 
 You just have to pass an argument, the `MAIN_C_FILE`, namely, the C source code file with the main function. 
-The bash script will mount the parent folder of the main C file under Docker, and it will generate an instrumented executable in the same folder with `.exe` extension.
+The bash script will mount the parent folder of the main C file under Docker and generate an instrumented executable in the same folder with `.exe` extension.
 
 
 ## Disclaimer & Limitations
@@ -54,4 +54,4 @@ I prefer to waste time but always be sure that I am working with the latest sour
 
 ## Acknowledgments
 My heartfelt thanks go to the authors of [llvm-tutor](https://github.com/banach-space/llvm-tutor), a tutorial for learning how LLVM passes work. 
-Without their project, I would never have been able to develop the supporting code in a reasonable time!
+With their project, I was able to develop the supporting code in a reasonable time!
