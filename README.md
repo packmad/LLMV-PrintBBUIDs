@@ -6,7 +6,7 @@ This LLVM pass instruments each basic block (BB) of a C program by injecting as 
 ## What is the purpose of this?
 
 I have a class on fuzzing in my [Introduction to Cybersecurity](https://simoneaonzo.it/introsec/) course. 
-In this class I have some limitations: 
+In this class, I have some limitations: 
 
 1) I only have three hours to introduce them to software testing;
  
