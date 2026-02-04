@@ -1,11 +1,15 @@
-FROM ubuntu:22.04
+FROM ocaml/opam:ubuntu-22.04-ocaml-4.14
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV LLVM_DIR /usr/lib/llvm-18/
-ENV PASS_DIR /llvm-pass
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LLVM_DIR=/usr/lib/llvm-18/
+ENV PASS_DIR=/home/opam/llvm-pass
 
-ENV TZ=Europe/Paris
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+SHELL ["/bin/bash", "-c"]
+
+#ENV TZ=Europe/Paris
+#RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+USER root
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -16,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     libzstd-dev \
     software-properties-common \
+    libgmp-dev pkg-config graphviz libcairo2-dev libexpat1-dev libgtk-3-dev libgtksourceview-3.0-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add && \
@@ -23,15 +28,22 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add && \
     apt-get update && \
     apt-get install -y llvm-18 llvm-18-dev llvm-18-tools clang-18 python3-setuptools
 
-RUN pip3 install lit
 
-COPY PrintBBUIDs/build.sh /root/
-RUN chmod +x /root/build.sh
+USER opam
 
-COPY PrintBBUIDs/ ${PASS_DIR}
+RUN python3 -m pip install --upgrade pip && \
+    pip3 install lit && \
+    # Install framac
+    opam update && \
+    opam install -y frama-c
+
+COPY --chown=opam:opam PrintBBUIDs/build.sh /home/opam
+RUN chmod +x /home/opam/build.sh
+
+COPY --chown=opam:opam PrintBBUIDs/ ${PASS_DIR}
 
 RUN mkdir -p $PASS_DIR/build && cd $PASS_DIR/build && \
     cmake -DLT_LLVM_INSTALL_DIR=$LLVM_DIR $PASS_DIR && \
     make -j $(nproc --all) 
 
-ENTRYPOINT ["/root/build.sh"]
+ENTRYPOINT ["/home/opam/build.sh"]
